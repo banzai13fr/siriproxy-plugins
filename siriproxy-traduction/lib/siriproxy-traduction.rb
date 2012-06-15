@@ -7,10 +7,12 @@ require 'json'
 
 class SiriProxy::Plugin::Traduction < SiriProxy::Plugin
 	def initialize(config)
-		@bingtranslation = config["api_bingtranslation"]
+		# Get your keys at https://datamarket.azure.com/developer/applications/
+		@bing_clientid = config["api_bing_clientid"]
+		@bing_clientsecret = config["api_bing_clientsecret"]
 	end
 	
-	listen_for /(Traduit|Traduire|Traduis)(.*) en (.*)/i do |ph,term,lang|
+	listen_for /(Traduit|Traduire|Traduis)(.*) en (.*)/i do |ph,text,lang|
 		lang = lang.strip.downcase
 		target = ""
 		
@@ -35,18 +37,26 @@ class SiriProxy::Plugin::Traduction < SiriProxy::Plugin
 		if target.empty?
 			say "Je ne connais pas cette langue."
 		else
-			begin
-				uri = "http://api.bing.net/json.aspx?Query=#{URI.encode(term)}&Translation.SourceLanguage=fr&Translation.TargetLanguage=#{target}&Version=2.2&AppId=#{@bingtranslation}&Sources=Translation" 
-				response = HTTParty.get(uri)
-				traduction = response["SearchResponse"]["Translation"]["Results"][0]["TranslatedTerm"]
-			rescue
-				traduction = ""
+			uri = "https://datamarket.accesscontrol.windows.net/v2/OAuth2-13"
+			response = HTTParty.post(uri, :body => {:grant_type => "client_credentials", :scope => "http://api.microsofttranslator.com", :client_id => URI.encode(@bing_clientid), :client_secret => URI.encode(@bing_clientsecret)})
+
+			access_token = nil
+			if !response["access_token"].nil?
+				access_token = response["access_token"]
+			else
+				say "Vos clés Bing ne sont pas valides."
+				request_completed
+				return
 			end
 
-			if !traduction.empty?
-				say traduction
-			else
-				say "Je n'arrive pas à traduire #{term} en #{lang}"
+			if !access_token.nil?
+				uri = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=#{URI.encode(text)}&from=fr&to=#{target}"
+				response = HTTParty.get(uri, :headers => {"Authorization" => "Bearer #{access_token}"})
+				if !response["string"].nil?
+					say response["string"]
+				else
+					say "Je n'arrive pas à traduire #{text} en #{lang}"
+				end
 			end
 		end
 		request_completed
