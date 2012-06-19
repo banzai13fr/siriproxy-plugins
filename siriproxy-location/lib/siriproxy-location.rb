@@ -164,6 +164,7 @@ class SiriProxy::Plugin::Location < SiriProxy::Plugin
 			radius = 15000
 			latlong = "#{latitude},#{longitude}"
 		
+			keyword = keyword.strip
 			keyword = keyword.gsub("près ","").gsub("plus proches","").gsub("plus proche","").gsub("à proximité","").gsub("dans le coin","").gsub("coin ","").gsub("par ","").gsub("la ","").gsub("les ","").gsub("le ","").gsub("des ","").gsub("d'ici ","").gsub("ici ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","")
 			
 			uri = "https://maps.googleapis.com/maps/api/place/search/json?location=#{latlong}&radius=#{radius}&keyword=#{URI.encode(keyword)}&sensor=true&key=#{@googleplaces}"

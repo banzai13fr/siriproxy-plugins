@@ -21,6 +21,7 @@ class SiriProxy::Plugin::Ebay < SiriProxy::Plugin
 
 	listen_for /ebay (.*)/i do |query|
 		begin
+			query = query.strip
 			query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","")
 			uri = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.00&SECURITY-APPNAME=#{@ebay_appname}&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&keywords=#{URI.encode(query)}&paginationInput.entriesPerPage=5&GLOBAL-ID=EBAY-FR"
 			response = HTTParty.get(uri)

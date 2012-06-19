@@ -2,8 +2,6 @@
 require 'pp'
 require 'rubygems'
 require 'httparty'
-require 'pathname'
-require 'iconv'
 
 def updateFiles(dir, override)
 	begin

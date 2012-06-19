@@ -14,6 +14,7 @@ class SiriProxy::Plugin::Definition < SiriProxy::Plugin
   
 	listen_for /définition (.*)/i do |query|
 
+		query = query.strip
 		query = query.sub('d\'','').sub('l\'','').sub('le ','').sub('du ','').sub('de ','').sub('pour ','')
 		query = query.mb_chars.normalize(:kd).to_str.gsub(/\p{Mn}/, '')
 		url = "http://www.google.com/dictionary/json?callback=dict_api.callbacks.id100&q=#{URI.encode(query)}&sl=fr-FR&tl=fr-FR&restrict=pr%2Cde&client=te"

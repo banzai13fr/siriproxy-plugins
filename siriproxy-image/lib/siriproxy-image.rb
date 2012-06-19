@@ -6,11 +6,11 @@ require 'httparty'
 
 class SiriProxy::Plugin::Image < SiriProxy::Plugin
 	def initialize(config)
-		#if you have custom configuration options, process them here!
 	end
   
 	listen_for /image (.*)/i do |query|
 
+		query = query.strip
 		query = query.sub('d\'','').sub('l\'','').sub('le ','').sub('du ','').sub('de ','').sub('pour ','')
 		url = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=#{URI.encode(query)}"
 
