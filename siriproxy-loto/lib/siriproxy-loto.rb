@@ -59,7 +59,8 @@ class SiriProxy::Plugin::Loto < SiriProxy::Plugin
 			end
 			say "Voici les résultats du loto pour le #{title} : "
 			say nums.join(" "), spoken: nums.join(", ")
-		end	
+		end
+		request_completed
 	end
 	
 	listen_for /r.sultat(.*)euro million/i do |ph|
@@ -81,6 +82,7 @@ class SiriProxy::Plugin::Loto < SiriProxy::Plugin
 		end
 		say "Voici les résultats de l'Euro Millions : "
 		say result, spoken: result_spoken
+		request_completed
 	end
 	
 end

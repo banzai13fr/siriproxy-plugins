@@ -53,5 +53,6 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 		rescue
 			say "Une erreur inconnue est survenue pendant l'accès à l'AppStore."
 		end
+		request_completed
 	end
 end

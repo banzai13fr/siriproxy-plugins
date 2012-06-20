@@ -3,10 +3,16 @@ require 'cora'
 require 'siri_objects'
 require 'pp'
 require 'imdb'
+require 'httparty'
 
-class SiriProxy::Plugin::ImdbPlugin < SiriProxy::Plugin
+class SiriProxy::Plugin::Movie < SiriProxy::Plugin
 	def initialize(config)
 	# Config here
+	end
+
+	class Allocine
+	  include HTTParty
+	  format :json
 	end
 	
 	def getFilm(name)
@@ -101,5 +107,34 @@ class SiriProxy::Plugin::ImdbPlugin < SiriProxy::Plugin
 		end
 		request_completed
 	end
+	
+	listen_for /sorti(.*)ciné/i do |ph|
+		uri = "http://api.allocine.fr/rest/v3/movielist?partner=YW5kcm9pZC12M3M&count=15&filter=nowshowing&page=1&order=datedesc&format=json"
+		response = Allocine.get(uri)
+
+		first = true
+		answers = []
+		response["feed"]["movie"].each do |movie|
+			title = movie["title"]
+			synopsis = movie["synopsisShort"]
+			poster = movie["poster"]["href"]
+			release = movie["release"]["releaseDate"]
+			week = Integer(movie["statistics"]["releaseWeekPosition"])
+			
+			if week == 0
+				if(first)
+					say "Voici les films sortis la semaine du #{release.split("-").reverse.join('/')} : "
+					first = false
+				end
+				answers.push(SiriAnswer.new(title,[SiriAnswerLine.new("poster",poster),SiriAnswerLine.new(synopsis)]))
+			end
+		end
+		view = SiriAddViews.new
+		view.make_root(last_ref_id)
+		view.views << SiriAnswerSnippet.new(answers)
+		send_object view			
+		request_completed
+	end
+	
 	
 end

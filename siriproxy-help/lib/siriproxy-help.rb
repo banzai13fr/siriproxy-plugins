@@ -57,5 +57,6 @@ class SiriProxy::Plugin::Help < SiriProxy::Plugin
 		view.views << SiriAssistantUtteranceView.new("Il y a #{answers.size} plugins installés.")
 		view.views << SiriAnswerSnippet.new(answers)
 		send_object view
+		request_completed
 	end
 end

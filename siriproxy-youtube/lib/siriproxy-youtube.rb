@@ -47,5 +47,6 @@ class SiriProxy::Plugin::Youtube < SiriProxy::Plugin
 		rescue
 			say "Une erreur inconnue m'empêche de rechercher sur Youtube."
 		end
+		request_completed
 	end
 end
