@@ -3,7 +3,7 @@ Actualité
 
 Affiche les dernières nouvelles nationales.
 
-Mot-clés : Acualité du jour
+Mot-clés : Actualité du jour
 
 Notice d'installation
 ---------------------
