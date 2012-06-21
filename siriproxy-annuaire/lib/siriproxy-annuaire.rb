@@ -72,7 +72,7 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 						if !listing["phoneNumbers"].nil?
 							fiche.push(listing["phoneNumbers"]["number"])
 						end
-						say fiche.join("\n"), fiche.join(",\n")
+						say fiche.join("\n"), spoken: fiche.join(",\n")
 					end
 				end
 			else
@@ -96,7 +96,7 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 							fiche.push("#{num} (#{val})")
 						end
 					end
-					say fiche.join("\n"), fiche.join(",\n")
+					say fiche.join("\n"),spoken: fiche.join(",\n")
 				end
 			else
 				say "Je n'ai trouvé aucun résultat."
