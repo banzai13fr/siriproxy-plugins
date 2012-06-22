@@ -16,7 +16,7 @@ class SiriProxy::Plugin::Youtube < SiriProxy::Plugin
 	end
 	add_property_to_class(OpenLink, :ref)
 
-	listen_for /youtube (.*)/i do |query|
+    listen_for /(youtube|you tube) (.*)/i do |ph,query|
 
 		query = query.strip
 		query = query.gsub("sur ","").gsub("pour ","").gsub("les ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","")
