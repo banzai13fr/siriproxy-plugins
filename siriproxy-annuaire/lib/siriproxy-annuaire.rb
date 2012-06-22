@@ -56,15 +56,22 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 			where = ""
 		end
 		
+		what = what.gsub("zéros","0").gsub("zéro","0").gsub("zero","0").gsub(/(\d) /,'\1')
+		where = where.gsub("zéros","0").gsub("zéro","0").gsub("zero","0").gsub(/(\d) /,'\1')
+
 		# The real thing
 		#country = "BE"
 		if country == "BE"
-			uri = "http://mobileproxy.truvo.net/BE/white/search.ds?platform=ipad&version=3&locale=fr_BE&what=#{URI.encode(what)}&where=#{URI.encode(where)}&distLatitude=#{@latitude}&distLongitude=#{@longitude}&activeSort=geo_spec_sortable"
+			uri = "http://mobileproxy.truvo.net/BE/white/search.ds?platform=ipad&version=3&locale=fr_BE&what=#{URI.encode(what)}&where=#{URI.encode(where)}&distLatitude=#{URI.encode(latitude)}&distLongitude=#{URI.encode(longitude)}&activeSort=geo_spec_sortable"
 			response = HTTParty.get(uri)
-
 			if response["results"]["pagination"]["totalNumberOfResults"] != "0"
-				response["results"]["listings"]["listing"].each do |listing|
-					if listing["type"] != "ad"
+				if response["results"]["pagination"]["totalNumberOfResults"] == "1"
+					listings = [response["results"]["listings"]["listing"]]
+				else
+					listings = response["results"]["listings"]["listing"]
+				end
+				listings.each do |listing|
+					if !listing.include?("type") or listing["type"] != "ad"
 						fiche = []
 						fiche.push(listing["businessName"])
 						fiche.push(listing["streetAddress"])
@@ -72,7 +79,7 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 						if !listing["phoneNumbers"].nil?
 							fiche.push(listing["phoneNumbers"]["number"])
 						end
-						say fiche.join("\n"), spoken: fiche.join(",\n")
+						say fiche.join("\n"), fiche.join(",\n")
 					end
 				end
 			else
@@ -96,7 +103,12 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 							fiche.push("#{num} (#{val})")
 						end
 					end
-					say fiche.join("\n"),spoken: fiche.join(",\n")
+					begin
+						ec = Encoding::Converter.new("ISO-8859-1", "UTF-8")
+						say ec.convert(fiche.join("\n")),spoken: ec.convert(fiche.join(",\n"))
+					rescue
+						say "Impossible d'afficher cette fiche."
+					end
 				end
 			else
 				say "Je n'ai trouvé aucun résultat."
