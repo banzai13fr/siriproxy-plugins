@@ -62,7 +62,7 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 		# The real thing
 		#country = "BE"
 		if country == "BE"
-			uri = "http://mobileproxy.truvo.net/BE/white/search.ds?platform=ipad&version=3&locale=fr_BE&what=#{URI.encode(what)}&where=#{URI.encode(where)}&distLatitude=#{URI.encode(latitude)}&distLongitude=#{URI.encode(longitude)}&activeSort=geo_spec_sortable"
+			uri = "http://mobileproxy.truvo.net/BE/white/search.ds?platform=ipad&version=3&locale=fr_BE&what=#{URI.encode(what)}&where=#{URI.encode(where)}&distLatitude=#{URI.encode(@latitude.to_s)}&distLongitude=#{URI.encode(@longitude.to_s)}&activeSort=geo_spec_sortable"
 			response = HTTParty.get(uri)
 			if response["results"]["pagination"]["totalNumberOfResults"] != "0"
 				if response["results"]["pagination"]["totalNumberOfResults"] == "1"
@@ -79,7 +79,7 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 						if !listing["phoneNumbers"].nil?
 							fiche.push(listing["phoneNumbers"]["number"])
 						end
-						say fiche.join("\n"), fiche.join(",\n")
+						say fiche.join("\n"),spoken: fiche.join(",\n")
 					end
 				end
 			else
