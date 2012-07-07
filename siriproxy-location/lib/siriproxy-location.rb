@@ -144,6 +144,8 @@ class SiriProxy::Plugin::Location < SiriProxy::Plugin
 			view.views << map_snippet
 			url = "http:addto.tomtom.com/api/home/v2/georeference?action=add&apikey=#{@tomtom}&latitude=#{latitude}&longitude=#{longitude}&name=#{URI.encode(long_name)}"
 			view.views << SiriButton.new("S'y rendre avec TomTom", [OpenLink.new(url)])
+			url = "http:cedricboverie.com/siri.php?action=navigon&value=#{URI.encode(long_name)};#{longitude};#{latitude}"
+			view.views << SiriButton.new("S'y rendre avec Navigon", [OpenLink.new(url)])
 			send_object view
 
 		else
@@ -168,7 +170,8 @@ class SiriProxy::Plugin::Location < SiriProxy::Plugin
 			keyword = keyword.gsub("près ","").gsub("plus proches","").gsub("plus proche","").gsub("à proximité","").gsub("dans le coin","").gsub("coin ","").gsub("par ","").gsub("la ","").gsub("les ","").gsub("le ","").gsub("des ","").gsub("d'ici ","").gsub("ici ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","")
 			
 			uri = "https://maps.googleapis.com/maps/api/place/search/json?location=#{latlong}&radius=#{radius}&keyword=#{URI.encode(keyword)}&sensor=true&key=#{@googleplaces}"
-
+			puts uri
+			
 			response = HTTParty.get(uri)
 
 			if response["status"] == "OK"

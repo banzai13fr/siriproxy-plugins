@@ -72,14 +72,23 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 				end
 				listings.each do |listing|
 					if !listing.include?("type") or listing["type"] != "ad"
+						number = nil
 						fiche = []
 						fiche.push(listing["businessName"])
 						fiche.push(listing["streetAddress"])
 						fiche.push("#{listing["zipCode"]} #{listing["city"]}")
 						if !listing["phoneNumbers"].nil?
 							fiche.push(listing["phoneNumbers"]["number"])
+							number = listing["phoneNumbers"]["number"]
 						end
 						say fiche.join("\n"),spoken: fiche.join(",\n")
+						view = SiriAddViews.new
+						view.make_root(last_ref_id)
+						if !number.nil?
+							view.views << SiriButton.new(number, [OpenLink.new("http:cedricboverie.com/siri.php?action=call&value=#{URI.encode(number)}")])
+						end
+						view.views << SiriAnswerSnippet.new([])
+						send_object view
 					end
 				end
 			else
@@ -92,11 +101,13 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 			if response["search_msg"] == "yes"
 				response["liste_part"].each do |part|
 					fiche = []
+					numbers = []
 					fiche.push("#{part["firstname"]} #{part["name"]}")
 					fiche.push(part["address"])
 					fiche.push("#{part["zipcode"]} #{part["city"]}")
 					
 					part["numeros"].each do |num, val|
+						numbers.push(num)
 						if val.empty?
 							fiche.push(num)
 						else
@@ -106,6 +117,14 @@ class SiriProxy::Plugin::Annuaire < SiriProxy::Plugin
 					begin
 						ec = Encoding::Converter.new("ISO-8859-1", "UTF-8")
 						say ec.convert(fiche.join("\n")),spoken: ec.convert(fiche.join(",\n"))
+						
+						view = SiriAddViews.new
+						view.make_root(last_ref_id)
+						numbers.each do |number|
+							view.views << SiriButton.new(number, [OpenLink.new("http:cedricboverie.com/siri.php?action=call&value=#{URI.encode(number)}")])
+						end
+						view.views << SiriAnswerSnippet.new([])
+						send_object view
 					rescue
 						say "Impossible d'afficher cette fiche."
 					end
