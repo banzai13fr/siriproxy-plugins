@@ -62,7 +62,7 @@ class SiriProxy::Plugin::Actualite < SiriProxy::Plugin
 		longitude = @longitude
 		
 		country = ""
-		ned = "fr"
+		ned = "us"
 		uri = "http://maps.googleapis.com/maps/api/geocode/json?latlng=#{latitude},#{longitude}&sensor=false&language=fr-FR"
 		response = HTTParty.get(uri)
 		if response["status"] == "OK"
