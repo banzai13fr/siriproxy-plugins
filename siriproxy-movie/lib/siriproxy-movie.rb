@@ -117,7 +117,12 @@ class SiriProxy::Plugin::Movie < SiriProxy::Plugin
 		response["feed"]["movie"].each do |movie|
 			title = movie["title"]
 			synopsis = movie["synopsisShort"]
-			poster = movie["poster"]["href"]
+			if movie.include?('poster')
+				poster = movie["poster"]["href"]
+			else
+				poster = ""
+			end
+
 			release = movie["release"]["releaseDate"]
 			week = Integer(movie["statistics"]["releaseWeekPosition"])
 			
