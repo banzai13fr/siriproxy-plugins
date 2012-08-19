@@ -6,7 +6,6 @@ require 'httparty'
 
 class SiriProxy::Plugin::RSS < SiriProxy::Plugin
 	def initialize(config)
-		#if you have custom configuration options, process them here!
 	end
 
 	class RSS
@@ -39,14 +38,6 @@ class SiriProxy::Plugin::RSS < SiriProxy::Plugin
 		end
 	end
 	
-	class OpenLink < SiriObject
-	  def initialize(ref="")
-		super("OpenLink", "com.apple.ace.assistant")
-		self.ref = ref
-	  end
-	end
-	add_property_to_class(OpenLink, :ref)
-
 	listen_for /iphone soft/i do
 		title = "iPhoneSoft.fr"
 		uri = "http://iphonesoft.fr"

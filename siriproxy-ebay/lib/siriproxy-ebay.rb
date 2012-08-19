@@ -11,14 +11,6 @@ class SiriProxy::Plugin::Ebay < SiriProxy::Plugin
 		@ebay_appname = config["api_ebay_appname"]
 	end
 	
-	class OpenLink < SiriObject
-	  def initialize(ref="")
-		super("OpenLink", "com.apple.ace.assistant")
-		self.ref = ref
-	  end
-	end
-	add_property_to_class(OpenLink, :ref)
-
 	listen_for /ebay (.*)/i do |query|
 		begin
 			query = query.strip

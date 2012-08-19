@@ -8,14 +8,6 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 	def initialize(config)
 	end
 	
-	class OpenLink < SiriObject
-	  def initialize(ref="")
-		super("OpenLink", "com.apple.ace.assistant")
-		self.ref = ref
-	  end
-	end
-	add_property_to_class(OpenLink, :ref)
-
 	listen_for /(appstore|app store|applications? pour|applications? de|apps? to|applications? to|apps? of|applications? of|apps? for|applications? for) (.*)/i do |ph,query|
 		query = query.strip
 		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")

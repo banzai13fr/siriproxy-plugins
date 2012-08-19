@@ -8,14 +8,6 @@ class SiriProxy::Plugin::Recette < SiriProxy::Plugin
 	def initialize(config)
 	end
 	
-	class OpenLink < SiriObject
-	  def initialize(ref="")
-		super("OpenLink", "com.apple.ace.assistant")
-		self.ref = ref
-	  end
-	end
-	add_property_to_class(OpenLink, :ref)
-
 	def displayCost(num)
 		rep = ""
 		i = 0

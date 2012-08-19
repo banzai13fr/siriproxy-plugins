@@ -19,14 +19,6 @@ class SiriProxy::Plugin::Actualite < SiriProxy::Plugin
 		end
 	end
 	
-	class OpenLink < SiriObject
-	  def initialize(ref="")
-		super("OpenLink", "com.apple.ace.assistant")
-		self.ref = ref
-	  end
-	end
-	add_property_to_class(OpenLink, :ref)
-
 	class RSS
 		include HTTParty
 		format :xml

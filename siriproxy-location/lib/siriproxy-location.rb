@@ -20,19 +20,8 @@ class SiriProxy::Plugin::Location < SiriProxy::Plugin
 			@longitude = nil
 		end
 	end
-	
-	class OpenLink < SiriObject
-	  def initialize(ref="")
-		super("OpenLink", "com.apple.ace.assistant")
-		self.ref = ref
-	  end
-	end
-	add_property_to_class(OpenLink, :ref)
 
 	listen_for /o(u|ù) suis.je/i do |ph|
-		
-		#request = SiriGetRequestOrigin.new("Best")
-		#send_object request
 	
 		latitude = @latitude
 		longitude = @longitude

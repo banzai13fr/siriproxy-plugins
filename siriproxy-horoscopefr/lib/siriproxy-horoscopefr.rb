@@ -6,7 +6,6 @@ require 'httparty'
 
 class SiriProxy::Plugin::HoroscopeFr < SiriProxy::Plugin
 	def initialize(config)
-		#if you have custom configuration options, process them here!
 	end
 
 	class AstroCenter
@@ -52,7 +51,7 @@ class SiriProxy::Plugin::HoroscopeFr < SiriProxy::Plugin
 			say h
 		end
 
-		request_completed #always complete your request! Otherwise the phone will "spin" at the user!
+		request_completed
 	end
 	
 end
