@@ -8,17 +8,39 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 	def initialize(config)
 	end
 	
+	def translation(english)
+		lang = user_language()[0..1]
+		if english == "Open in App Store"
+			if lang == "fr"
+				return "Voir dans l'App Store"
+			end
+		elsif english == "I found at least %1$d apps for %2$s:"
+			if lang == "fr"
+				return "J'ai trouvé au moins %1$d applications pour %2$s :"
+			end
+		elsif english == "Free"
+			if lang == "fr"
+				return "Gratuit"
+			end
+		elsif english == "An unknown error occured while accessing the App Store."
+			if lang == "fr"
+				return "Une erreur inconnue est survenue pendant l'accès à l'AppStore."
+			end
+		end
+		return english
+	end
+	
 	listen_for /(appstore|app store|applications? pour|applications? de|apps? to|applications? to|apps? of|applications? of|apps? for|applications? for) (.*)/i do |ph,query|
 		query = query.strip
 		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
-		uri = "http://itunes.apple.com/search?term=#{URI.encode(query)}&country=fr&media=software&entity=software&limit=5&genreId=&version=2&output=json&callback="
+		uri = "http://itunes.apple.com/search?term=#{URI.encode(query)}&country=#{user_language[3..4]}&media=software&entity=software&limit=5&genreId=&version=2&output=json&callback="
 		
 		begin
 			response = HTTParty.get(uri)
 
 			count = Integer(response["resultCount"])
 			if count > 0
-				say "Voici #{count} applications pour #{query} :"
+				say printf(translation("I found at least %1$d apps for %2$s:"),count,query)
 				response["results"].each do |app|
 					title = app["trackName"]
 					description = app["description"].split("\n")[0]
@@ -26,9 +48,9 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 					image = app["artworkUrl60"]
 					url = app["trackViewUrl"].sub("//","")
 					if price == 0
-						price = "Gratuit"
+						price = translation("Free")
 					else
-						price = "#{price} €"
+						price = "#{price}"
 					end
 					size = "#{(Float(app["fileSizeBytes"])/1048576).round(2)} Mo"
 					categories = app["genres"].join(', ')
@@ -36,14 +58,14 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 					view = SiriAddViews.new
 					view.make_root(last_ref_id)
 					view.views << SiriAnswerSnippet.new([SiriAnswer.new(title, [SiriAnswerLine.new(categories),SiriAnswerLine.new("logo",image),SiriAnswerLine.new("Taille : #{size}"),SiriAnswerLine.new("Prix   : #{price}"),SiriAnswerLine.new(description)])])
-					view.views << SiriButton.new("Voir dans l'AppStore", [OpenLink.new(url)])
+					view.views << SiriButton.new(translation("Open in App Store"), [OpenLink.new(url)])
 					send_object view
 				end
 			else
 				say "Je n'ai trouvé aucune application pour #{query}."
 			end
 		rescue
-			say "Une erreur inconnue est survenue pendant l'accès à l'AppStore."
+			say translation("An unknown error occured while accessing the App Store.")
 		end
 		request_completed
 	end

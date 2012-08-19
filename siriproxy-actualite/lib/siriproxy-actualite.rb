@@ -6,7 +6,6 @@ require 'httparty'
 
 class SiriProxy::Plugin::Actualite < SiriProxy::Plugin
 	def initialize(config)
-		#if you have custom configuration options, process them here!
 	end
 	
 	filter "SetRequestOrigin", direction: :from_iphone do |object|
@@ -25,14 +24,16 @@ class SiriProxy::Plugin::Actualite < SiriProxy::Plugin
 		
 		def initialize(plugin, titre, uri, flux)
 			rss = RSS.get(flux)
-			plugin.say "Voici les dernières infos du jour :"
 			answers = []
 			if rss != nil
 				rss["rss"]["channel"]["item"].each do |item|
 					title = item["title"]
 					image = item["description"][/.*<img.*src="([^"]*)"/,1]
-					description = item["description"].gsub(%r{</?[^>]+?>}, '')
+					description = item["description"].gsub("<br />","\n").gsub(%r{</?[^>]+?>}, '').gsub("&#39;","'")
 					if image != nil
+						if image.index("http") == nil
+							image = image.sub('//','http://')
+						end
 						answers.push(SiriAnswer.new(title, [SiriAnswerLine.new("logo",image),SiriAnswerLine.new("#{description}")]))
 					elsif
 						answers.push(SiriAnswer.new(title, [SiriAnswerLine.new("#{description}")]))
@@ -42,14 +43,28 @@ class SiriProxy::Plugin::Actualite < SiriProxy::Plugin
 				view = SiriAddViews.new
 				view.make_root(plugin.last_ref_id)
 				view.views << SiriAnswerSnippet.new(answers)
-				view.views << SiriButton.new("Ouvrir Google News", [OpenLink.new(uri.gsub("//",""))])
+				view.views << SiriButton.new("Google News", [OpenLink.new(uri.gsub("//",""))])
 				plugin.send_object view
 			end
 			plugin.request_completed
 		end
 	end
 	
-	listen_for /actualité(.*)jour/i do |ph|
+	def translation(english)
+		lang = user_language()[0..1]
+		if english == "Here are the latest news:"
+			if lang == "fr"
+				return "Voici les dernières infos du jour :"
+			end
+		elsif english == "News"
+			if lang == "fr"
+				return "Actualité"
+			end
+		end
+		return english
+	end
+	
+	listen_for /actualité(.*)jour|today(.*)news|news(.*)today/i do |ph|
 		latitude = @latitude
 		longitude = @longitude
 		
@@ -67,22 +82,23 @@ class SiriProxy::Plugin::Actualite < SiriProxy::Plugin
 		end
 		
 		if country == "BE"
-			ned = "fr_be"
+			ned = "#{user_language[0..1]}_be"
 		elsif country == "CA"
-			ned = "fr_ca"
+			ned = "#{user_language[0..1]}_ca"
 		elsif country == "CH"
-			ned = "fr_ch"
+			ned = "#{user_language[0..1]}_ch"
 		elsif country == "MA"
-			ned = "fr_ma"
+			ned = "#{user_language[0..1]}_ma"
 		elsif country == "SN"
-			ned = "fr_sn"
+			ned = "#{user_language[0..1]}_sn"
 		else
 			ned = country.downcase
 		end
 	
-		title = "Actualité"
+		say translation("Here are the latest news:")
+		title = translation("News")
 		uri = "https://news.google.com/"
-		flux = "http://fulltextrssfeed.com/news.google.com/news/feeds?pz=1&cf=all&ned=#{ned}&output=rss"
+		flux = "http://news.google.com/news/feeds?pz=1&cf=all&ned=#{ned}&output=rss"
 		RSS.new(self,title,uri,flux)
 	end
 	
