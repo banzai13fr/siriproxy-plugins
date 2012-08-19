@@ -26,6 +26,10 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 			if lang == "fr"
 				return "Une erreur inconnue est survenue pendant l'accès à l'AppStore."
 			end
+		elsif english == "I don't have any application for %1$s."
+			if lang == "fr"
+				return "Je n'ai trouvé aucune application pour %1$s."
+			end
 		end
 		return english
 	end
@@ -40,7 +44,7 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 
 			count = Integer(response["resultCount"])
 			if count > 0
-				say printf(translation("I found at least %1$d apps for %2$s:"),count,query)
+				say sprintf(translation("I found at least %1$d apps for %2$s:"),count,query)
 				response["results"].each do |app|
 					title = app["trackName"]
 					description = app["description"].split("\n")[0]
@@ -62,7 +66,7 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 					send_object view
 				end
 			else
-				say "Je n'ai trouvé aucune application pour #{query}."
+				say sprintf(translation("I don't have any application for %1$s."), query)
 			end
 		rescue
 			say translation("An unknown error occured while accessing the App Store.")
