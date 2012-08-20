@@ -16,7 +16,7 @@ class SiriProxy::Plugin::Blagues < SiriProxy::Plugin
 	
 	listen_for /(raconte|dis|dit) une blague/i do |ph|
 		begin
-			file = File.open(@dir+"/blagues", "r:UTF-8")
+			file = File.open(@dir+"/jokes-fr", "r:UTF-8")
 			contents = file.read
 			liste = contents.split('%')
 			rand = rand(liste.length-1)
@@ -28,8 +28,33 @@ class SiriProxy::Plugin::Blagues < SiriProxy::Plugin
 		request_completed
 	end
 	
-	listen_for /vie de merde/i do
+	listen_for /(tell|say) a joke/i do |ph|
+		begin
+			file = File.open(@dir+"/jokes-en", "r:UTF-8")
+			contents = file.read
+			liste = contents.split('%')
+			rand = rand(liste.length-1)
+			joke = liste[rand].strip
+			say joke
+		rescue
+			say "It's the story of..."
+		end
+		request_completed
+	end
+	
+	listen_for /vie de merde|vdm/i do
 		uri = "http://www.vdm-iphone.com/v8/fr/random.php?cat=all&num_page=0"
+		vdm = VieDeMerde.get(uri)
+		if vdm != nil
+			items = vdm["root"]["item"]
+			rand = rand(items.length)
+			say items[rand]["text"]
+		end
+		request_completed
+	end
+	
+	listen_for /fuck my life|fml/i do
+		uri = "http://www.vdm-iphone.com/v8/en/random.php?cat=all&num_page=0"
 		vdm = VieDeMerde.get(uri)
 		if vdm != nil
 			items = vdm["root"]["item"]
@@ -55,15 +80,27 @@ class SiriProxy::Plugin::Blagues < SiriProxy::Plugin
 	end
 	
 	listen_for /chuck norris/i do
-		begin
-			file = File.open(@dir+"/fortunes-cn", "r")
-			contents = file.read
-			liste = contents.split('%')
-			rand = rand(liste.length-1)
-			dtc = liste[rand].strip
-			say dtc
-		rescue
-			say "Chuck Norris n'a pas besoin d'une liste de blagues pour être drôle. C'est la liste des blagues qui a besoin de Chuck Norris."
+		lang = user_language[0..1]
+		
+		if lang == "fr"
+			begin
+				file = File.open(@dir+"/fortunes-cn", "r:UTF-8")
+				contents = file.read
+				liste = contents.split('%')
+				rand = rand(liste.length-1)
+				dtc = liste[rand].strip
+				say dtc
+			rescue
+				say "Chuck Norris n'a pas besoin d'une liste de blagues pour être drôle. C'est la liste des blagues qui a besoin de Chuck Norris."
+			end
+		else
+			uri = "http://api.icndb.com/jokes/random/"
+			content = HTTParty.get(uri)
+			if content["value"]["joke"] != nil
+				say content["value"]["joke"].gsub("&quot;",'"')
+			else
+				say "Chuck Norris can't have a failure but icndb.com can."
+			end
 		end
 		request_completed
 	end
