@@ -1,11 +1,11 @@
-Aide
+Help
 ====
 
-Affiche cet écran d'aide sur les plugins installés.
+Display a help screen about the installed plugins.
 
-Mot-clés : extensions installées, fonctions supplémentaires
+Keywords : plugins installed
 
-Notice d'installation
+How to install
 ---------------------
 
-Rien de particulier.
+Nothing in particular.

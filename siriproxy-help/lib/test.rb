@@ -30,9 +30,9 @@ Dir.glob(File.dirname(__FILE__)+"/../../siriproxy-*") do |dir|
 				prev_ligne = ligne
 			end
 		end
-	
+		
 		description = description.join("\n")
-
+		
 		puts name
 		puts description
 	end

@@ -7,10 +7,22 @@ class SiriProxy::Plugin::Help < SiriProxy::Plugin
 	def initialize(config)
 	end
 
-	listen_for /(extensions? install|fonctions? suppl)/i do
+	listen_for /(extensions? install|fonctions? suppl|addons? install|plugins? install)/i do
 		answers = []
+		lang = user_language[0..1]
+		
 		Dir.glob(File.dirname(__FILE__)+"/../../siriproxy-*") do |dir|
-			readme = dir+"/README.md"
+			
+			if lang == "fr"
+				readme = dir+"/README-FR.md"
+			else
+				readme = dir+"/README.md"
+			end
+			
+			# Default README
+			if !File.exist?(readme)
+				readme = dir+"/README.md"
+			end
 
 			name = ""
 			description = []
@@ -46,7 +58,11 @@ class SiriProxy::Plugin::Help < SiriProxy::Plugin
 		
 		view = SiriAddViews.new
 		view.make_root(last_ref_id)
-		view.views << SiriAssistantUtteranceView.new("Il y a #{answers.size} plugins installés.")
+		if lang == "fr"
+			view.views << SiriAssistantUtteranceView.new("Il y a #{answers.size} plugins installés.")
+		else
+			view.views << SiriAssistantUtteranceView.new("There are #{answers.size} plugins installed.")
+		end
 		view.views << SiriAnswerSnippet.new(answers)
 		send_object view
 		request_completed
