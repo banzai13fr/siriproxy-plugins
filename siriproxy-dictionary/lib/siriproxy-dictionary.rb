@@ -12,13 +12,16 @@ class SiriProxy::Plugin::Dictionary < SiriProxy::Plugin
 	def initialize(config)
 	end
   
-	listen_for /définitions? (.*)|definitions? (.*)|define (.*)/i do |query|
+	listen_for /(définitions?|definitions?|define) (.*)/i do |ph,query|
 
 		query = query.strip
 		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
 		query = query.mb_chars.normalize(:kd).to_str.gsub(/\p{Mn}/, '')
-		url = "http://www.google.com/dictionary/json?callback=dict_api.callbacks.id100&q=#{URI.encode(query)}&sl=#{user_language}&tl=#{user_language}&restrict=pr%2Cde&client=te"
-
+		lang = user_language
+		if lang.empty?
+			lang = "en-US"
+		end
+		url = "http://www.google.com/dictionary/json?callback=dict_api.callbacks.id100&q=#{URI.encode(query)}&sl=#{lang}&tl=#{lang}&restrict=pr%2Cde&client=te"
 		jsonString = Net::HTTP.get(URI.parse(url))
 		jsonString = jsonString.gsub(",200,null)","").gsub("dict_api.callbacks.id100(","")
 		jsonString = jsonString.gsub('\\x3c','').gsub('\\x3d','').gsub('\\x3e','').gsub('\\x22','').gsub('\\x26','').gsub("#39;","'")

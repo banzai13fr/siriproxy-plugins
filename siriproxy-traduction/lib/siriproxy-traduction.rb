@@ -26,15 +26,15 @@ class SiriProxy::Plugin::Traduction < SiriProxy::Plugin
 			if lang == "fr"
 				return "Je n'arrive pas à traduire %1$s en %2$s."
 			end
+		end
 	end
 	
-	listen_for /(Traduit|Traduire|Traduis|Translate)(.*) (en|in|to) (.*)/i do |ph,text,ph2,lang|
-		lang = lang.strip.downcase
+	listen_for /(Traduit|Traduire|Traduis|Translate)(.*) (en|in|to) (.*)/i do |ph,text,ph2,dest|
+		dest = dest.strip.downcase
+		text = text.strip
 		target = ""
 		
-		
 		lang = user_language[0..1]
-		
 		if lang == "fr"
 			languages = {
 				"anglais" => "en","arabe" => "ar","bulgare" => "gb","catalan" => "ca","chinois" => "zh-CHS","chinois traditionnel" => "zh-CHT",
@@ -60,12 +60,12 @@ class SiriProxy::Plugin::Traduction < SiriProxy::Plugin
 		end
 
 		languages.each do |name,code|
-			if lang.include?(name)
+			if dest.include?(name)
 				target = code
 				break
 			end
 		end
-
+		
 		if target.empty?
 			say translation("I don't know this language.")
 		else
@@ -82,12 +82,12 @@ class SiriProxy::Plugin::Traduction < SiriProxy::Plugin
 			end
 
 			if !access_token.nil?
-				uri = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=#{URI.encode(text)}&from=fr&to=#{target}"
+				uri = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=#{URI.encode(text)}&from=#{lang}&to=#{target}"
 				response = HTTParty.get(uri, :headers => {"Authorization" => "Bearer #{access_token}"})
 				if !response["string"].nil?
 					say response["string"]
 				else
-					say sprintf(translation("I can't translate %1$s in %2$s."), text, lang)
+					say sprintf(translation("I can't translate %1$s in %2$s."), text, dest)
 				end
 			end
 		end
