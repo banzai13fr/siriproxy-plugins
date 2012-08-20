@@ -4,7 +4,7 @@ require 'siri_objects'
 require 'pp'
 require 'httparty'
 
-class SiriProxy::Plugin::Blagues < SiriProxy::Plugin
+class SiriProxy::Plugin::Jokes < SiriProxy::Plugin
 	def initialize(config)
 		@dir = File.dirname(__FILE__)
 	end
