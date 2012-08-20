@@ -4,7 +4,7 @@ require 'siri_objects'
 require 'pp'
 require 'httparty'
 
-class SiriProxy::Plugin::Actualite < SiriProxy::Plugin
+class SiriProxy::Plugin::News < SiriProxy::Plugin
 	def initialize(config)
 	end
 	

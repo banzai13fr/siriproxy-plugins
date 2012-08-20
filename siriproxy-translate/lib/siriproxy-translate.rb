@@ -5,7 +5,7 @@ require 'pp'
 require 'httparty'
 require 'json'
 
-class SiriProxy::Plugin::Traduction < SiriProxy::Plugin
+class SiriProxy::Plugin::Translate < SiriProxy::Plugin
 	def initialize(config)
 		# Get your keys at https://datamarket.azure.com/developer/applications/
 		@bing_clientid = config["api_bing_clientid"]

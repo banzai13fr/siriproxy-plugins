@@ -4,7 +4,7 @@ require 'siri_objects'
 require 'pp'
 require 'httparty'
 
-class SiriProxy::Plugin::Image < SiriProxy::Plugin
+class SiriProxy::Plugin::Picture < SiriProxy::Plugin
 	def initialize(config)
 	end
   
