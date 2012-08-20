@@ -7,7 +7,7 @@ class SiriProxy::Plugin::Open < SiriProxy::Plugin
 	def initialize(config)
 	end
 	  
-	listen_for /ouvrir(.*)/i do |query|
+	listen_for /(ouvrir|open)(.*)/i do |ph,query|
 		search = WebSearch.new(last_ref_id,"",query,"Bing")
 		send_object search
 		request_completed
