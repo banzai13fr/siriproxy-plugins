@@ -33,6 +33,38 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
 			if lang == "fr"
 				return "Je n'ai trouvé aucune application pour %1$s."
 			end
+		elsif english == "Here are %1$d results:"
+			if lang == "fr"
+				return "Voilà %1$d résultats :"
+			end
+		elsif english == "Sorry, I don't have any result for %1$s on Ebay."
+			if lang == "fr"
+				return "Désolé, je n'ai trouvé aucun %1$s sur Ebay."
+			end
+		elsif english == "Sorry, I can't process your request at this time."
+			if lang == "fr"
+				return "Désolé, je ne peux pas traîter votre requête pour le moment."
+			end
+		elsif english == "An unknown error occured while accessing Ebay."
+			if lang == "fr"
+				return "Une erreur inconnue est survenue lors de votre recherche sur Ebay."
+			end
+		elsif english == "Here are %1$d videos for %2$s on Youtube:"
+			if lang == "fr"
+				return "Voici %1$d vidéos pour %2$s :"
+			end
+		elsif english == "See the video"
+			if lang == "fr"
+				return "Voir la vidéo"
+			end
+		elsif english == "Sorry, I don't have any video for %1$s."
+			if lang == "fr"
+				return "Je n'ai trouvé aucune vidéo pour %1$s."
+			end
+		elsif english == "An unknown error occured while accessing Youtube."
+			if lang == "fr"
+				return "Une erreur inconnue m'empêche de rechercher sur Youtube."
+			end
 		end
 		return english
 	end
@@ -83,7 +115,7 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
 	listen_for /ebay (.*)/i do |query|
 		begin
 			query = query.strip
-			query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","")
+			query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
 			uri = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.00&SECURITY-APPNAME=#{@ebay_appname}&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&keywords=#{URI.encode(query)}&paginationInput.entriesPerPage=5&GLOBAL-ID=EBAY-FR"
 			response = HTTParty.get(uri)
 			
@@ -92,7 +124,7 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
 				count = Integer(response["findItemsByKeywordsResponse"]["searchResult"]["count"])
 				
 				if count > 0
-					say "Voilà #{count} résultats :"
+					say sprintf(translation("Here are %1$d results:"), count)
 					response["findItemsByKeywordsResponse"]["searchResult"]["item"].each do |item|
 						title = item["title"].downcase.capitalize
 						image = item["galleryURL"]
@@ -110,13 +142,13 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
 						send_object view
 					end
 				else
-					say "Désolé, je n'ai trouvé aucun #{query} sur Ebay."
+					say sprintf(translation("Sorry, I don't have any result for %1$s on Ebay."), query)
 				end
 			else
-				say "Désolé, je ne peux pas traîter votre requête pour le moment."
+				say translation("Sorry, I can't process your request at this time.")
 			end
 		rescue
-			say "Une erreur inconnue est survenue lors de votre recherche sur Ebay."
+			say translation("An unknown error occured while accessing Ebay.")
 		end
 		request_completed
 	end
@@ -126,7 +158,7 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
     listen_for /(youtube|you tube) (.*)/i do |ph,query|
 
 		query = query.strip
-		query = query.gsub("sur ","").gsub("pour ","").gsub("les ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","")
+		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
 		
 		begin
 			uri = "https://gdata.youtube.com/feeds/api/videos?hl=fr&q=#{URI.encode(query)}&orderby=relevance_lang_fr&max-results=5&v=2&alt=json";
@@ -134,7 +166,7 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
 
 			count = Integer(response["feed"]["openSearch$totalResults"]["$t"])
 			if count > 0
-				say "Voici #{response["feed"]["entry"].size} vidéos pour #{query} : "
+				say sprintf(translation("Here are %1$d videos for %2$s on Youtube:"), response["feed"]["entry"].size, query)
 				response["feed"]["entry"].each do |entry|
 					title = entry["title"]["$t"]
 					category = entry["media$group"]["media$category"][0]["label"]
@@ -145,14 +177,14 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
 					view = SiriAddViews.new
 					view.make_root(last_ref_id)
 					view.views << SiriAnswerSnippet.new([SiriAnswer.new(category, [SiriAnswerLine.new(title),SiriAnswerLine.new("logo",image)])])
-					view.views << SiriButton.new("Voir la vidéo", [OpenLink.new(url)])
+					view.views << SiriButton.new(translation("See the video"), [OpenLink.new(url)])
 					send_object view
 				end
 			else
-				say "Je n'ai trouvé aucune vidéo pour #{query}"
+				say sprintf(translation("Sorry, I don't have any video for %1$s."), query)
 			end
 		rescue
-			say "Une erreur inconnue m'empêche de rechercher sur Youtube."
+			say translation("An unknown error occured while accessing Youtube.")
 		end
 		request_completed
 	end
