@@ -1,14 +1,14 @@
-Blagues
+Jokes
 ==========
 
-Dire des blagues.
+Siri will tell you some jokes.
 
-Mot-clés : dit une blague, raconte une blague, Vie De Merde, Dans Ton Chat, Chuck Norris
+Mot-clés : tell a joke, F*ck My Life, Chuck Norris
 
-Notice d'installation
+How to install
 ---------------------
 
-Deux possibilités :
+2 ways to complete the installation (require only for some French jokes):
 
-1. Executer le script updater.rb du dossier lib (non-fonctionnel pour l'instant).
-2. Télécharger les fichiers [fortunes-dtc](http://danstonchat.com/fortunes) et [fortunes-cn](http://chucknorrisfacts.fr/fortunes/fortunes.txt) dans le dossier lib (renommez-les bien en fortunes-dtc et fortunes-cn).
+1. Run the script updater.rb. You can find it in the lib folder
+2. Download the files : [fortunes-dtc](http://danstonchat.com/fortunes) and [fortunes-cn](http://chucknorrisfacts.fr/fortunes/fortunes.txt) and put these in the lib folder (renamed respectively fortunes-dtc and fortunes-cn).
