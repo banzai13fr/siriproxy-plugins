@@ -36,7 +36,7 @@ class SiriProxy::Plugin::Appstore < SiriProxy::Plugin
 	
 	listen_for /(appstore|app store|applications? pour|applications? de|apps? to|applications? to|apps? of|applications? of|apps? for|applications? for) (.*)/i do |ph,query|
 		query = query.strip
-		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
+		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
 		uri = "http://itunes.apple.com/search?term=#{URI.encode(query)}&country=#{user_language[3..4]}&media=software&entity=software&limit=5&genreId=&version=2&output=json&callback="
 		
 		begin
