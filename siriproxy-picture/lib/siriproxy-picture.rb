@@ -11,7 +11,7 @@ class SiriProxy::Plugin::Picture < SiriProxy::Plugin
 	listen_for /(photos?|images?|dessins?|illustrations?|affiche.moi|dessine.moi|pictures?|drawing|show me) (.*)/i do |ph,query|
 
 		query = query.strip
-		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
+		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","").gsub("an ","")
 		url = "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=#{URI.encode(query)}"
 
 		jsonString = Net::HTTP.get(URI.parse(url))

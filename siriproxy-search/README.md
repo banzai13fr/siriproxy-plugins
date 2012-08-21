@@ -1,20 +1,20 @@
-AppStore
-==========
+Search
+========
 
-Rechercher des applications sur l'AppStore, des enchères sur Ebay et des vidéos sur Youtube.
+Search apps on the App Store, Search auctions on Ebay and videos on Youtube.
 
-Mot-clés : app store Twitter, applications pour voyager, applications de sport, ebay iPhone 4S, youtube iPhone 4S, recherche sur youtube comment faire un noeud de cravate
+Keyword: app store Twitter, apps to travel, ebay iPhone 4S, youtube iPhone 4S
 
-Notice d'installation
----------------------
+How to install
+---------------
 
-Rien de particulier, sauf pour Ebay :
+Nothing in particular. except for Ebay :
 
-1. Vous devez créer une clé API sur Ebay, pour ce faire, créez un compte sur [https://developer.ebay.com/DevZone/account/](https://developer.ebay.com/DevZone/account/).
-2. Une fois connecté, sur la même page, générez des clés de **PRODUCTION** (Generate Production Keys).
-3. Vous ne devrez utiliser que la clé **AppID**.
-4. Installez le plugin normalement, mais rajoutez la clé comme ceci :
+1. You need to create an API key on [https://developer.ebay.com/DevZone/account/](https://developer.ebay.com/DevZone/account/).
+2. Once connected, on the same page, generate **PRODUCTION** Keys.
+3. You will only need the **AppID**.
+4. Install the plugin normally but add the key like that:
 
     - name: 'Search'
-      path: '/chemin-complet-vers-le-repertoire-contenant-les-plugins/siriproxy-search'
+      path: '/absolute-path-to-plugins-folder/siriproxy-search'
       api_ebay_appname: 'MA-CLE-APPID-EBAY'

@@ -115,7 +115,7 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
 	listen_for /ebay (.*)/i do |query|
 		begin
 			query = query.strip
-			query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
+			query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","").gsub("an ","")
 			uri = "http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.12.00&SECURITY-APPNAME=#{@ebay_appname}&RESPONSE-DATA-FORMAT=XML&REST-PAYLOAD&keywords=#{URI.encode(query)}&paginationInput.entriesPerPage=5&GLOBAL-ID=EBAY-FR"
 			response = HTTParty.get(uri)
 			
@@ -158,7 +158,7 @@ class SiriProxy::Plugin::Search < SiriProxy::Plugin
     listen_for /(youtube|you tube) (.*)/i do |ph,query|
 
 		query = query.strip
-		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","")
+		query = query.gsub("la ","").gsub("les ","").gsub("le ","").gsub("l'","").gsub("d'","").gsub("des ","").gsub("de ","").gsub("du ","").gsub("une ","").gsub("un ","").gsub("dans ","").gsub("pour ","").gsub("the ","").gsub("of ","").gsub("for ","").gsub(" an ","")
 		
 		begin
 			uri = "https://gdata.youtube.com/feeds/api/videos?hl=fr&q=#{URI.encode(query)}&orderby=relevance_lang_fr&max-results=5&v=2&alt=json";

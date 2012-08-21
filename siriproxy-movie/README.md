@@ -1,11 +1,11 @@
-Films
-==========
+Movies
+=========
 
-Questions sur les films, les acteurs et les sorties au cinéma.
+Ask questions about movies and actors.
 
-Mot-clés : Qui joue dans le film Titre Du Film, Note du film Titre, Devrais-je voir le film Titre, Qui est l'acteur principal de Titre, Qui a réalisé le film Titre, Quand est sorti le film Titre, Affiche du film Titre, sortie ciné
+Keywords: who played in Movie Title, What's the score of Movie Title, Should I see Movie Title, Main actor of Movie Title, Who directed Movie Title, When was released Movie Title, Movie poster Movie Title
 
-Notice d'installation
----------------------
+How to install
+---------------
 
-Rien de particulier.
+Nothing in particular.

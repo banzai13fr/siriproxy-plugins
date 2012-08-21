@@ -1,18 +1,18 @@
-Traduction
+Translate
 ==========
 
-Traduire des simples phrases dans d'autres langues (plus de 30 langues supportées).
+Translate simple sentences in other languages (over 30 languages supported).
 
-Mot-clés : traduire quelque chose en anglais, traduit bonjour en russe, ...
+Keywords: translate hello in French, translate goodbye in japanese
 
-Notice d'installation
----------------------
+How to install
+---------------
 
-1. Vous devez créer une clé API sur Bing, pour ce faire, rendez-vous sur [https://datamarket.azure.com/dataset/1899a118-d202-492c-aa16-ba21c33c06cb](https://datamarket.azure.com/dataset/1899a118-d202-492c-aa16-ba21c33c06cb) et inscrivez-vous à l'offre gratuite à 2 000 000 de caractères par mois, pour commencer (cette étape est peut-être optionnelle avec la nouvelle API, à tester).
-2. Vous pourrez ensuite créer une application sur [https://datamarket.azure.com/developer/applications/](https://datamarket.azure.com/developer/applications/). Lors de la création de l'application, vous pourrez choisir vos clés, vous aurez besoin de ID Client (client id) et Secret du client (client secret). Vous pouvez mettre ce que vous voulez comme URL de redirection.
-3. Installez le plugin normalement, mais rajoutez les clés comme ceci :
+1. You need to go to [https://datamarket.azure.com/dataset/1899a118-d202-492c-aa16-ba21c33c06cb](https://datamarket.azure.com/dataset/1899a118-d202-492c-aa16-ba21c33c06cb), register and choose the free offer at 2,000,000 chars/month (this step may be optional with the new API).
+2. Next you can create an app on [https://datamarket.azure.com/developer/applications/](https://datamarket.azure.com/developer/applications/). You will be able to choose your keys, you will need Client ID and Client Secret. You can put whatever you want as Redirect URL.
+3. Install the plugin normally but add the key like that:
 
-    - name: 'Traduction'
-      path: '/chemin-complet-vers-le-repertoire-contenant-les-plugins/siriproxy-traduction'
+    - name: 'Translate'
+      path: '/absolute-path-to-plugins-folder/siriproxy-translate'
       api_bing_clientid: 'CLIENT ID'
       api_bing_clientsecret: 'CLIENT SECRET'

@@ -1,11 +1,11 @@
-Actualité
+News
 ==========
 
-Affiche les dernières nouvelles nationales.
+Display the latest national news.
 
-Mot-clés : Actualité du jour
+Mot-clés : today's news
 
-Notice d'installation
----------------------
+How to install
+---------------
 
-Rien de particulier.
+Nothing in particular.

@@ -1,11 +1,11 @@
-Image
+Picture
 ==========
 
-Recherche une image à propos d'un sujet sur Google.
+Search a picture on Google.
 
-Mot-clés : image de chat, image d'iPhone
+Keywords: picture iPhone
 
-Notice d'installation
----------------------
+How to install
+---------------
 
-Rien de particulier.
+Nothing in particular.

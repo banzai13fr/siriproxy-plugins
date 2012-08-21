@@ -1,18 +1,19 @@
-Ouvrir une application
-=======================
+Open an app
+=============
 
-Lancer une application directement depuis Siri (contactez l'administrateur du proxy pour l'activer sur votre appareil).
+Launch an app (ask the proxy's administrator to enable this feature on your device).
 
-Mot-clés : ouvrir l'application Facebook, ouvrir Twitter, ouvrir mail, ouvrir TomTom, ouvrir l'application musique, ...
+Keywords: open Facebook, open Twitter, open mail, open TomTom, open music, ...
 
-Notice d'installation
----------------------
+How to install
+---------------
 
-Rien de particulier sur le serveur, mais vous devez configurer chaque iDevice pour faire fonctionner ce plugin correctement. Ces modifications redirigeront les recherches sur Bing vers mon seveur, qui, à son tour, redigera vers une url spéciale permettant d'ouvrir une application (exemple : youtube:).
+Nothing in particular on the server but each device must be configurate separately to make this plugin works.
+These changes will redirect Bing search to my server, which will redirect you to a special url scheme to open an app (e.g. youtube:)
 
-### Solution 1
+On each iDevice :
 
-Ajouter ces lignes dans le fichier `/etc/hosts` de vos iDevices (peut-être d'autres domaines en fonction de votre pays, regardez quel domaine est utilisé pour vos recherches sur Bing) : 
+Add these lines to the file `/etc/hosts` of your iDevices. Leave at least one blank line at the end of the file. You may need to add another subdomain of Bing on iPad (e.g. uk.bing.com in United Kingdom or maybe bing.com in the U.S.A.)
 
 91.121.103.229 m.bing.com
 
@@ -20,6 +21,3 @@ Ajouter ces lignes dans le fichier `/etc/hosts` de vos iDevices (peut-être d'au
 
 91.121.103.229 fr.bing.com
 
-### Solution 2
-
-Bientôt...

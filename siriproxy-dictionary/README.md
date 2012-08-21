@@ -1,11 +1,11 @@
-Dictionnaire
+Dictionary
 =============
 
-Définition de mots.
+Define words.
 
-Mot-clés : définition de anticonstitutionnellement
+Keywords: define pneumonoultramicroscopicsilicovolcanoconiosis
 
-Notice d'installation
----------------------
+How to install
+---------------
 
-Rien de particulier.
+Nothing in particular.
