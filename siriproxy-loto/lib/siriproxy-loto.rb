@@ -67,16 +67,16 @@ class SiriProxy::Plugin::Loto < SiriProxy::Plugin
 		response = HTTParty.get("https://www.fdj.fr/jeux/euromillions/tirage")
 		doc = Nokogiri::HTML(response)
 
-		title = doc.css("#euromillions_title").first.content
+		title = doc.css(".dateTirage").first.content
 
 		result = "#{title} : "
 		result_spoken =  "#{title} : "
-		doc.css("#listeNumeros p").each do |p|
+		doc.css(".euromillions_numeros p.euro_num").each do |p|
 			result += "#{p.content} "
 			result_spoken += "#{p.content}, "
 		end
 		result_spoken += "Et les étoiles : "
-		doc.css("#listeEtoiles p").each do |p|
+		doc.css(".euromillions_numeros p.euro_num_c").each do |p|
 			result += "#{p.content} "
 			result_spoken += "#{p.content}, "
 		end
